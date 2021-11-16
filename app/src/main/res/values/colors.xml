@@ -8,5 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="miAzul">#08709F</color>
-    <color name="seleccionado">#FFEB3B</color>
+    <color name="seleccionado">#266129</color>
+    <color name="miFondo">#44AD48</color>
+    <color name="colorTexto">#51035D</color>
+
 </resources>

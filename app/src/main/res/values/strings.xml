@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MiColorNote</string>
+    <string name="lista_notas">Notes Lists</string>
 </resources>

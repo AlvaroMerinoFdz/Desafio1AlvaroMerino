@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
         miRecyclerView = findViewById(R.id.rvVista) as RecyclerView
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(this)
