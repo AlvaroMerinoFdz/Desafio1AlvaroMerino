@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< Updated upstream
         <entry key="..\:/Users/Alvaro Merino/AndroidStudioProjects/Desafio1AlvaroMerino/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Alvaro Merino/AndroidStudioProjects/Desafio1AlvaroMerino/app/src/main/res/layout/nota_card.xml" value="0.25" />
+=======
+        <entry key="..\:/Users/Alvaro Merino/AndroidStudioProjects/Desafio1AlvaroMerino/app/src/main/res/layout/activity_main.xml" value="0.18034447821681865" />
+        <entry key="..\:/Users/alvar/Documents/DESAFIO 1/Desafio1AlvaroMerino/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+>>>>>>> Stashed changes
       </map>
     </option>
   </component>
