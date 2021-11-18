@@ -7,4 +7,9 @@
     <string name="borrarSi">Si</string>
     <string name="borrarNo">No</string>
     <string name="strEliminando">Nota eliminada</string>
+    <string name="addTitulo">Añadir Nota</string>
+    <string name="addOpcion">Seleccione una opción</string>
+    <string name="addTexto">Texto</string>
+    <string name="addTareas">Tarea</string>
+    <string name="Asunto">Asunto</string>
 </resources>

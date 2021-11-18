@@ -7,4 +7,9 @@
     <string name="borrarSi">Oui</string>
     <string name="borrarMensaje">¿Voulez-vous supprimer la note?</string>
     <string name="borrarTitulo">Supprimer la note</string>
+    <string name="addTitulo">Ajouter une note</string>
+    <string name="addOpcion">Sélectionner une option</string>
+    <string name="addTexto">Texte</string>
+    <string name="addTareas">Tâche</string>
+    <string name="Asunto">Asuntè</string>
 </resources>

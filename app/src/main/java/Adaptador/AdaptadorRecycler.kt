@@ -3,6 +3,7 @@ package Adaptador
 import Modelo.DeTareas
 import Modelo.DeTexto
 import Modelo.Notas
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater

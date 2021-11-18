@@ -6,4 +6,9 @@
     <string name="borrarSi">Yes</string>
     <string name="strEliminando">Deleted note</string>
     <string name="borrarNo">No</string>
+    <string name="addTitulo">Add Note</string>
+    <string name="addOpcion">Select an option</string>
+    <string name="addTexto">Text</string>
+    <string name="addTareas">Task</string>
+    <string name="Asunto">Affair</string>
 </resources>
