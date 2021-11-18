@@ -6,6 +6,9 @@ import Modelo.Notas
 import Modelo.Tarea
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,19 +18,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Esto luego lo voy a borrar, es para probar
         var texto:DeTexto = DeTexto(0,"25/11","11:15","asunto","Contenido")
         var lista:DeTareas = DeTareas(1,"23/11","2:34","asunto2",ArrayList<Tarea>())
         var notas:ArrayList<Notas> = ArrayList()
         notas.add(lista)
         notas.add(texto)
+        notas.add(lista)
         notas.add(texto)
-        notas.add(texto)
-        notas.add(texto)
-        notas.add(texto)
-
-
-
-
 
         miRecyclerView = findViewById(R.id.rvVista) as RecyclerView
         miRecyclerView.setHasFixedSize(true)
@@ -35,4 +33,40 @@ class MainActivity : AppCompatActivity() {
         var miAdapter = Adaptador.AdaptadorRecycler(notas, this)
         miRecyclerView.adapter = miAdapter
     }
+
+    /*fun addNota(view: View){
+        AlertDialog.Builder(this).setTitle(getString(R.string.addTitulo))
+            .setMessage(getString(R.string.addMensaje))
+            .setPositiveButton(getString(R.string.addTipoTexto)) { view, _ ->
+                pedirAsunto(TipoNota.TEXTO)
+                view.dismiss()
+            }
+            .setNegativeButton(getString(R.string.strTipoTareas)) { view, _ ->
+                pedirAsunto(TipoNota.LISTA_TAREAS)
+                view.dismiss()
+            }
+            .setCancelable(true)
+            .create()
+            .show()
+    }
+    private fun pedirAsunto(tipoNota: TipoNota) {
+        var asunto = ""
+        val dialogView = layoutInflater.inflate(R.layout.asunto_view, null)
+        val txtAsunto = dialogView.findViewById<EditText>(R.id.edAsunto)
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.strTituloAsunto))
+            .setView(dialogView)
+            .setPositiveButton("OK") { view, _ ->
+                asunto = txtAsunto.text.toString().trim()
+                asunto = if (asunto.isNotEmpty()) asunto
+                else "Sin asunto"
+                crearNota(tipoNota, asunto)
+                rv.adapter = NotasAdapter(this, notasList)
+                view.dismiss()
+
+            }
+            .setCancelable(false)
+            .create()
+            .show()
+    }*/
 }

@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MiColorNote</string>
     <string name="lista_notas">Notes Lists</string>
+    <string name="borrarTitulo">Delete Note</string>
+    <string name="borrarMensaje">Do you want to delete the note?</string>
+    <string name="borrarSi">Yes</string>
+    <string name="strEliminando">Deleted note</string>
+    <string name="borrarNo">No</string>
 </resources>

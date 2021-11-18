@@ -10,6 +10,7 @@ object Constantes {
     val FECHA_NOTAS = "FECHA"
     val HORA_NOTAS = "HORA"
     val ASUNTO_NOTAS = "ASUNTO"
+    val TIPO_NOTAS = "TIPO"
 
 
     //DATOS DE LA TABLA DE NOTAS DE TEXTO
@@ -24,5 +25,10 @@ object Constantes {
     val DESCRIPCION_TAREAS = "DESCRIPCION"
     val FOTO_TAREAS = "FOTO"
     val REALIZADO_TAREAS = "REALIZADO"
+
+    //FORMATOS
+    val FORMATO_HORA = "hh:mm"
+    val FORMATO_FECHA = "dd/MM/yyyy"
+
 
 }

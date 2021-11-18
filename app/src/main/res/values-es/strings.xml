@@ -2,4 +2,9 @@
 <resources>
     <string name="app_name">MiColorNote</string>
     <string name="lista_notas">Lista de notas</string>
+    <string name="borrarTitulo">Borrar Nota</string>
+    <string name="borrarMensaje">¿Quieres borrar la nota?</string>
+    <string name="borrarSi">Si</string>
+    <string name="borrarNo">No</string>
+    <string name="strEliminando">Nota eliminada</string>
 </resources>
