@@ -117,6 +117,7 @@ class AdaptadorRecycler(var notas: ArrayList<Notas>, var context: AppCompatActiv
                     .setPositiveButton(context.getString(R.string.borrarSi)) { view, _ ->
                         //eliminar nota
                         adaptadorRecycler.notas.removeAt(pos)
+
                         Toast.makeText(context, context.getString(R.string.strEliminando), Toast.LENGTH_SHORT).show()
                         adaptadorRecycler.notifyDataSetChanged()
                         view.dismiss()
