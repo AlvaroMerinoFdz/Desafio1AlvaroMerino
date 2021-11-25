@@ -11,4 +11,8 @@
     <string name="addTexto">Text</string>
     <string name="addTareas">Task</string>
     <string name="Asunto">Affair</string>
+    <string name="Guardar">Save</string>
+    <string name="Cancelar">Cancel</string>
+    <string name="Capturar">Capture</string>
+    <string name="Realizado">Realice</string>
 </resources>

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio1AlvaroMerino">
         <activity
+            android:name=".ItemTareaActivity"
+            android:exported="false" />
+        <activity
             android:name=".TextoActivity"
             android:exported="false" />
         <activity

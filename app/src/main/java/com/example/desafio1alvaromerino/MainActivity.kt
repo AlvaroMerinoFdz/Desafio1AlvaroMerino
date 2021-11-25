@@ -3,6 +3,8 @@ package com.example.desafio1alvaromerino
 import Modelo.DeTareas
 import Modelo.DeTexto
 import Modelo.Notas
+import Utiles.Auxiliar
+import Utiles.FactoriaNota
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -24,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //Esto luego lo voy a borrar, es para probar
-        val texto = DeTexto(0,"25/11","11:15","asunto","Contenido")
-        val lista = DeTareas(1,"23/11","2:34","asunto2",ArrayList())
+        val texto = DeTexto("0","25/11","11:15","asunto","Contenido")
+        val lista = DeTareas("1","23/11","2:34","asunto2",ArrayList())
         notas= ArrayList()
         notas.add(lista)
         notas.add(texto)
@@ -52,11 +54,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addNota(view: View){
+        val dialogview = layoutInflater.inflate(R.layout.asunto_layout,null)
+        val txtAsunto = dialogview.findViewById<EditText>(R.id.txtAsuntoItem)
+        var asunto:String
         AlertDialog.Builder(this).setTitle(getString(R.string.addTitulo))
             .setMessage(getString(R.string.addOpcion)).setView(R.layout.asunto_layout)
             .setPositiveButton(R.string.addTexto){ view,_ ->
+                if(txtAsunto.text.trim().toString().equals("")){
+                    asunto = "asunto"
+                }else{
+                    asunto = txtAsunto.text.trim().toString()
+                }
+                var nota:Notas = FactoriaNota.genererarNota(asunto,0)
                 val intent = Intent(this, TextoActivity::class.java)
-
+               //Generamos la de texto
+                var deTexto: DeTexto = DeTexto(nota.id,nota.fecha,nota.hora,asunto)
+                intent.putExtra("Texto", deTexto)
                 startActivity(intent)
             view.dismiss()}
             .setNegativeButton(R.string.addTareas){view,_ ->

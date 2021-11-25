@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imgEditNota"
+            android:id="@+id/imgDeleteNota"
             android:layout_width="198dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
