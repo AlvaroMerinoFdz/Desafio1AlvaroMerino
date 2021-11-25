@@ -30,6 +30,9 @@ class AdaptadorRecycler(var notas: ArrayList<Notas>, var context: AppCompatActiv
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = notas.get(position)
+        holder.asunto.text = notas[position].asunto
+        holder.fecha.text = notas[position].fecha
+        holder.hora.text = notas[position].hora
 
         holder.bind(item, context, position, this)
     }
@@ -62,9 +65,9 @@ class AdaptadorRecycler(var notas: ArrayList<Notas>, var context: AppCompatActiv
             adaptadorRecycler.notifyDataSetChanged()
         }
         fun bind(texto: Notas, context: AppCompatActivity, pos: Int, adaptadorRecycler: AdaptadorRecycler) {
-            asunto.text = texto.asunto
+           /* asunto.text = texto.asunto
             fecha.text = texto.fecha
-            hora.text = texto.hora
+            hora.text = texto.hora*/
 
             if (pos == seleccionado) {
                 with(asunto) {

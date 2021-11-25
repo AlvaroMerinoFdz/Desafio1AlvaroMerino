@@ -25,14 +25,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Esto luego lo voy a borrar, es para probar
-        val texto = DeTexto("0","25/11","11:15","asunto","Contenido")
-        val lista = DeTareas("1","23/11","2:34","asunto2",ArrayList())
+
+
         notas= ArrayList()
-        notas.add(lista)
-        notas.add(texto)
-        notas.add(lista)
-        notas.add(texto)
+        notas = Conexion.Conexion.getNotas(this)
+
 
         miRecyclerView = findViewById(R.id.rvVista)
         miRecyclerView.setHasFixedSize(true)
@@ -60,15 +57,23 @@ class MainActivity : AppCompatActivity() {
         AlertDialog.Builder(this).setTitle(getString(R.string.addTitulo))
             .setMessage(getString(R.string.addOpcion)).setView(R.layout.asunto_layout)
             .setPositiveButton(R.string.addTexto){ view,_ ->
-                if(txtAsunto.text.trim().toString().equals("")){
-                    asunto = "asunto"
+                if(txtAsunto.text.toString().trim().isEmpty()){
+                    asunto = "Asunto"
                 }else{
                     asunto = txtAsunto.text.trim().toString()
                 }
                 var nota:Notas = FactoriaNota.genererarNota(asunto,0)
+                //Añadimos la nota a la lista
+                notas.add(nota)
+
+
+
                 val intent = Intent(this, TextoActivity::class.java)
                //Generamos la de texto
                 var deTexto: DeTexto = DeTexto(nota.id,nota.fecha,nota.hora,asunto)
+                //Guardamos la nota en la Base de Datos
+                Conexion.Conexion.addNotaText(this,deTexto)
+                //La pasamos a la siguiente ventana
                 intent.putExtra("Texto", deTexto)
                 startActivity(intent)
             view.dismiss()}

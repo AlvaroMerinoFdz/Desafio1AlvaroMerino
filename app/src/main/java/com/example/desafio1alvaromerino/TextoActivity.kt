@@ -12,19 +12,20 @@ class TextoActivity : AppCompatActivity() {
     lateinit var txtAsunto: EditText
     lateinit var txtContenido : EditText
     lateinit var btnGuardar : Button
-    private var nota: DeTexto? = null
+    lateinit var  nota: DeTexto
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_texto)
 
-        val i = intent
-        nota = i.getSerializableExtra("Texto") as DeTexto?
+        val i = intent.extras
+            nota = i?.getSerializable("Texto") as DeTexto
+
         txtAsunto = findViewById(R.id.etAsunto)
         txtContenido = findViewById(R.id.etTexto)
         btnGuardar = findViewById(R.id.btnGuardar)
 
-        txtAsunto.setText(nota!!.asunto)
-        txtContenido.setText(nota?.texto)
+        txtAsunto.append(nota.asunto)
+        txtContenido.setText(nota.texto)
 
     }
 
