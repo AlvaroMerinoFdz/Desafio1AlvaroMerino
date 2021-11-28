@@ -24,7 +24,7 @@ object FactoriaNota {
         var fecha = SimpleDateFormat("yyyy/MM/dd").format(time).toString()
         var hora = SimpleDateFormat("HH:mm").format(time).toString()
 
-        val nota:Notas = Notas(id,asunto,fecha,hora,tipo)
+        val nota:Notas = Notas(id,fecha,hora,asunto,tipo)
         return nota
     }
 

@@ -1,6 +1,5 @@
 package Conexion
 
-import Modelo.DeTareas
 import Modelo.DeTexto
 import Modelo.Notas
 import Modelo.Tarea
@@ -13,7 +12,21 @@ object Conexion {
     private var nombreBBDD = Constantes.NOMBREBBDD
 
     //CREATE
-    fun addNotaText(context: Context, nota:DeTexto){
+    fun addNota(context: Context, nota:Notas){
+        val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
+        val bd = admin.writableDatabase
+        val reg = ContentValues()
+
+        reg.put(Constantes.ID_NOTAS, nota.id)
+        reg.put(Constantes.FECHA_NOTAS,nota.fecha)
+        reg.put(Constantes.HORA_NOTAS, nota.hora)
+        reg.put(Constantes.ASUNTO_NOTAS, nota.asunto)
+        reg.put(Constantes.TIPO_NOTAS, nota.tipo)
+        bd.insert(Constantes.TABLA_NOTAS, null, reg)
+        bd.close()
+
+    }
+    fun addTexto(context: Context, nota: Notas){
         val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
         val bd = admin.writableDatabase
         val reg = ContentValues()
@@ -25,14 +38,14 @@ object Conexion {
         reg.put(Constantes.TIPO_NOTAS, nota.tipo)
         bd.insert(Constantes.TABLA_NOTAS, null, reg)
 
-        //ahora registramos una de texto
         val regTexto = ContentValues()
         regTexto.put("${Constantes.ID_TEXTO}", nota.id)
-        regTexto.put("${Constantes.CONTENIDO_TEXTO}",nota.texto)
+        regTexto.put("${Constantes.CONTENIDO_TEXTO}","")
         bd.insert("${Constantes.TABLA_TEXTO}", null, regTexto)
         bd.close()
 
     }
+
 
     fun addTarea(context: Context, idNota:Int, tarea:Tarea){
         val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
@@ -55,9 +68,41 @@ object Conexion {
         bd.close()
         return cant
     }
+    fun delTarea(context: AppCompatActivity, tarea: Tarea):Int {
+        val admin = AdminSQLiteConexion(context, Constantes.NOMBREBBDD, null, 1)
+        val bd = admin.writableDatabase
+        val id = tarea.idTarea
+        var cant = bd.delete("${Constantes.TABLA_TAREAS}", "${Constantes.CODIGO_TAREAS}='${id}'", null)
+        bd.close()
+        return cant
+    }
 
 
     //UPDATE
+    fun modificarNotaTexto(context: AppCompatActivity,id:String, nota:DeTexto):Int{
+        val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
+        val bd = admin.writableDatabase
+        val reg = ContentValues()
+
+        reg.put(Constantes.ID_NOTAS, nota.id)
+        reg.put(Constantes.FECHA_NOTAS,nota.fecha)
+        reg.put(Constantes.HORA_NOTAS, nota.hora)
+        reg.put(Constantes.ASUNTO_NOTAS, nota.asunto)
+        reg.put(Constantes.TIPO_NOTAS, nota.tipo)
+        bd.insert(Constantes.TABLA_NOTAS, null, reg)
+        val cant = bd.update("${Constantes.TABLA_NOTAS}",reg,"${Constantes.ID_NOTAS}='${id}",null)
+
+        val regTexto = ContentValues()
+        regTexto.put("${Constantes.ID_TEXTO}", nota.id)
+        regTexto.put("${Constantes.CONTENIDO_TEXTO}",nota.texto)
+        val cantTexto = bd.update("${Constantes.TABLA_TEXTO}", regTexto,"${Constantes.ID_NOTAS}=${id}",null)
+
+        bd.close()
+        if(cant == cantTexto){
+            return cantTexto
+        }else
+            return cant
+    }
 
 
 
@@ -90,4 +135,6 @@ object Conexion {
             n = Notas(fila.getString(0),fila.getString(1),fila.getString(2),fila.getString(3),fila.getInt(4))
         }
     }
+
+
 }

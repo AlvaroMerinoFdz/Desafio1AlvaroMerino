@@ -14,7 +14,7 @@ object Constantes {
 
 
     //DATOS DE LA TABLA DE NOTAS DE TEXTO
-    val TABLA_TEXTO = "DETEXTO"
+    val TABLA_TEXTO = "TEXTO"
     val ID_TEXTO = "ID"
     val CONTENIDO_TEXTO = "CONTENIDO"
 

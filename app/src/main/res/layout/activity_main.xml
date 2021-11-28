@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/ic_baseline_edit_24"
+            android:onClick="editNota"
             android:visibility="invisible" />
 
         <LinearLayout

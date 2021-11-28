@@ -5,10 +5,11 @@
     style="@style/Theme.Desafio1AlvaroMerino.Fondo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="guardar"
     tools:context=".ItemTareaActivity">
 
     <EditText
-        android:id="@+id/txtNombre"
+        android:id="@+id/txtDescripcion"
         android:layout_width="380dp"
         android:layout_height="116dp"
         android:ems="10"
@@ -22,14 +23,14 @@
         app:layout_constraintVertical_bias="0.052" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imgImagenTarea"
         android:layout_width="173dp"
         android:layout_height="151dp"
         android:layout_marginBottom="392dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombre"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescripcion"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_baseline_image_24" />
 
@@ -38,16 +39,17 @@
         style="@style/Theme.Desafio1AlvaroMerino.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="tomarFoto"
         android:text="@string/Capturar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imgImagenTarea"
         app:layout_constraintVertical_bias="0.122" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/swRealizado"
         android:layout_width="130dp"
         android:layout_height="48dp"
         android:text="@string/Realizado"
@@ -63,11 +65,12 @@
         style="@style/Theme.Desafio1AlvaroMerino.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="guardar"
         android:text="@string/Guardar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imgImagenTarea"
         app:layout_constraintVertical_bias="0.679" />
 </androidx.constraintlayout.widget.ConstraintLayout>

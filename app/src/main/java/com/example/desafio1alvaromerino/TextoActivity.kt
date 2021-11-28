@@ -2,11 +2,13 @@ package com.example.desafio1alvaromerino
 
 import Modelo.DeTexto
 import Modelo.Notas
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.app.ActivityCompat
 
 class TextoActivity : AppCompatActivity() {
     lateinit var txtAsunto: EditText
@@ -18,7 +20,7 @@ class TextoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_texto)
 
         val i = intent.extras
-            nota = i?.getSerializable("Texto") as DeTexto
+        nota = i?.getSerializable("Texto") as DeTexto
 
         txtAsunto = findViewById(R.id.etAsunto)
         txtContenido = findViewById(R.id.etTexto)
@@ -28,8 +30,12 @@ class TextoActivity : AppCompatActivity() {
         txtContenido.setText(nota.texto)
 
     }
-
     fun cerrar(view:View){
         finish()
     }
+    fun guardar(view:View){
+        val id = nota.id
+        Conexion.Conexion.modificarNotaTexto(this,id, nota)
+    }
+
 }

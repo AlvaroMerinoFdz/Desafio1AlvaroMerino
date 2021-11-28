@@ -40,6 +40,7 @@ class AdaptadorRecycler(var notas: ArrayList<Notas>, var context: AppCompatActiv
     override fun getItemCount(): Int {
         return notas.size
     }
+
     fun getSelected():Notas{
         return notas.get(seleccionado)
     }
@@ -64,8 +65,9 @@ class AdaptadorRecycler(var notas: ArrayList<Notas>, var context: AppCompatActiv
             //Con la siguiente instrucción forzamos a recargar el viewHolder porque han cambiado los datos. Así pintará al seleccionado.
             adaptadorRecycler.notifyDataSetChanged()
         }
-        fun bind(texto: Notas, context: AppCompatActivity, pos: Int, adaptadorRecycler: AdaptadorRecycler) {
-           /* asunto.text = texto.asunto
+        fun bind(nota: Notas, context: AppCompatActivity, pos: Int, adaptadorRecycler: AdaptadorRecycler) {
+            /*
+            asunto.text = texto.asunto
             fecha.text = texto.fecha
             hora.text = texto.hora*/
 
@@ -117,16 +119,17 @@ class AdaptadorRecycler(var notas: ArrayList<Notas>, var context: AppCompatActiv
                     .setPositiveButton(context.getString(R.string.borrarSi)) { view, _ ->
                         //eliminar nota
                         adaptadorRecycler.notas.removeAt(pos)
-
-
+                        Conexion.Conexion.delNota(context as AppCompatActivity, nota)
 
                         Toast.makeText(context, context.getString(R.string.strEliminando), Toast.LENGTH_SHORT).show()
                         adaptadorRecycler.notifyDataSetChanged()
                         view.dismiss()
                     }
                     .setNegativeButton(context.getString(R.string.borrarNo)) { view, _ -> view.dismiss() }.setCancelable(false).create().show()
+                btnEditar.isVisible = false
                 true
             })
+
         }
     }
 }
