@@ -47,7 +47,9 @@ class ItemTareaActivity : AppCompatActivity() {
 
             tarea.descripcion = txtDescripcion.text.toString()
             tarea.foto = imagen.imageAlpha
-            tarea.realizada = switch.isChecked
+            tarea.realizada = false
+
+            Conexion.Conexion.modificarTarea(this,tarea)
         }
 
 

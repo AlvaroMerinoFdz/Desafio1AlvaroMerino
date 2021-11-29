@@ -4,6 +4,7 @@ import Adaptador.AdaptadorContactos
 import Modelo.Contacto
 import Modelo.DeTexto
 import Modelo.Notas
+import Utiles.FactoriaNota
 import android.Manifest
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -24,35 +25,58 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TextoActivity : AppCompatActivity() {
     lateinit var txtAsunto: EditText
-    lateinit var txtContenido : EditText
-    lateinit var btnGuardar : Button
-    lateinit var  nota: DeTexto
+    lateinit var txtContenido: EditText
+    lateinit var btnGuardar: Button
+
+    //lateinit var nota: Notas
+    private var idNota: String = ""
+    private var texto: String = ""
+    private var deTexto:DeTexto? = null
     lateinit var adaptadorContactos: Adaptador.AdaptadorContactos
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_texto)
-
-        val i = intent.extras
-        nota = i?.getSerializable("Texto") as DeTexto
-
         txtAsunto = findViewById(R.id.etAsunto)
         txtContenido = findViewById(R.id.etTexto)
         btnGuardar = findViewById(R.id.btnGuardar)
+        txtAsunto.setText("")
+        val i = intent.extras
 
-        txtAsunto.append(nota.asunto)
-        txtContenido.setText(nota.texto)
+        idNota = i?.getString("Nota").toString()
+        texto = i?.getString("Texto").toString()
 
+
+
+        if(texto != "null"){
+            txtAsunto.setText(texto)
+            idNota = FactoriaNota.factoria_id()
+        }else{
+            deTexto = Conexion.Conexion.getNotaTexto(this, idNota) as DeTexto
+            txtContenido.setText(deTexto!!.texto)
+            txtAsunto.setText(deTexto!!.asunto)
+        }
     }
-    fun cerrar(view:View){
+
+    fun cerrar(view: View) {
         finish()
     }
-    fun guardar(view:View){
-        val id = nota.id
-        Conexion.Conexion.modificarNotaTexto(this,id, nota)
+
+    fun guardar(view: View) {
+        if(deTexto != null){
+            var notadeTextoaModificar = DeTexto(deTexto!!.id,deTexto!!.fecha,deTexto!!.hora,txtAsunto.text.toString(),txtContenido.text.toString())
+            Conexion.Conexion.modificarNotaTexto(this,idNota,notadeTextoaModificar)
+        }else{
+            var contenido = txtContenido.text.toString()
+            var notaTexto: DeTexto = FactoriaNota.generarNotaTexto(idNota,texto, contenido)
+            Conexion.Conexion.addTexto(this, notaTexto)
+        }
+        //val id = nota.id
+        //Conexion.Conexion.modificarNotaTexto(this,deTexto.id, deTexto)
+
         finish()
     }
 
-    fun compartir(view:View){
+    fun compartir(view: View) {
         var contactos: ArrayList<Contacto>
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
             == PackageManager.PERMISSION_GRANTED
@@ -66,56 +90,84 @@ class TextoActivity : AppCompatActivity() {
     }
 
     private fun abrirDialogContactos(contactos: java.util.ArrayList<Contacto>) {
-        var dialogView = layoutInflater.inflate(R.layout.layout_lista_contactos,null)
+        var dialogView = layoutInflater.inflate(R.layout.layout_lista_contactos, null)
         var rvContacto: RecyclerView = dialogView.findViewById(R.id.rvContactos)
         rvContacto.setHasFixedSize(true)
         rvContacto.layoutManager = LinearLayoutManager(this)
-        adaptadorContactos = AdaptadorContactos(this,contactos)
+        adaptadorContactos = AdaptadorContactos(this, contactos)
         rvContacto.adapter = adaptadorContactos
 
-        if(contactos.size > 0){
+        if (contactos.size > 0) {
             AlertDialog.Builder(this).setTitle(getString(R.string.Contactos))
-                .setView(dialogView).setPositiveButton(getString(R.string.OK)){dialog,_ ->
-                    if(adaptadorContactos.isSelected()){
+                .setView(dialogView).setPositiveButton(getString(R.string.OK)) { dialog, _ ->
+                    if (adaptadorContactos.isSelected()) {
                         var contacto = adaptadorContactos.getSelected()
                         enviarMensaje(contacto)
                         dialog.dismiss()
-                    }else{
-                        Toast.makeText(this,getString(R.string.noSeleccionado),Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, getString(R.string.noSeleccionado), Toast.LENGTH_LONG)
+                            .show()
                     }
                 }.setCancelable(true).create().show()
-        }else{
-            Toast.makeText(this,getString(R.string.noExisten),Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, getString(R.string.noExisten), Toast.LENGTH_LONG).show()
         }
 
     }
-    private fun enviarMensaje(contacto: Contacto){
-        val packageManager = this.packageManager
-        if(packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY) || packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_CDMA)){
-            var permissionCheck = ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS)
-            if(permissionCheck == PackageManager.PERMISSION_DENIED){
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SEND_SMS),101)
-            }else{
+
+    private fun enviarMensaje(contacto: Contacto) {
+        /*val packageManager = this.packageManager
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY) || packageManager.hasSystemFeature(
+                PackageManager.FEATURE_TELEPHONY_CDMA
+            )
+        ) {
+            var permissionCheck =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SEND_SMS), 101)
+            } else {
                 sendSMS(contacto)
             }
-        }
+        }*/
     }
 
     private fun getContactos(): ArrayList<Contacto> {
-        var contactos:ArrayList<Contacto> = ArrayList()
+        var contactos: ArrayList<Contacto> = ArrayList()
         var contentResolver = this.contentResolver
-        var cur : Cursor? = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,null,null,null,null,null)
-        if(cur!= null){
-            if(cur.count > 0){
-                while(cur != null && cur.moveToNext()){
-                    var id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID).toInt())
-                    var nombre = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME).toInt())
-                    if(cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER).toInt())>0){
-                        val pCur = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", arrayOf(id), null)
+        var cur: Cursor? = contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        if (cur != null) {
+            if (cur.count > 0) {
+                while (cur != null && cur.moveToNext()) {
+                    var id =
+                        cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID).toInt())
+                    var nombre = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME).toInt()
+                    )
+                    if (cur.getInt(
+                            cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER).toInt()
+                        ) > 0
+                    ) {
+                        val pCur = contentResolver.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            arrayOf(id),
+                            null
+                        )
                         //obtenemos los numeros de ese contacto
-                        if(pCur!!.moveToFirst()){
-                            val numeroTfno = pCur!!.getString( pCur!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER).toInt())
-                            contactos.add(Contacto(nombre,numeroTfno))
+                        if (pCur!!.moveToFirst()) {
+                            val numeroTfno = pCur!!.getString(
+                                pCur!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                                    .toInt()
+                            )
+                            contactos.add(Contacto(nombre, numeroTfno))
                         }
                         pCur!!.close()
                     }
@@ -156,7 +208,11 @@ class TextoActivity : AppCompatActivity() {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    /*override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 101) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -165,16 +221,18 @@ class TextoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Necesitas tener permisos", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-    private fun sendSMS(contacto: Contacto){
-        var numero :String = contacto.numero
-        numero.replace(" ","")
-        numero.replace("+34","")
-        var miMsg = "${nota.asunto} : \n \t ${nota.texto}"
-        if(TextUtils.isDigitsOnly(numero)){
-            var smsManager:SmsManager = SmsManager.getDefault()
-            smsManager.sendTextMessage(numero,null,miMsg,null,null)
+    }*/
+
+    /*private fun sendSMS(contacto: Contacto) {
+        var numero: String = contacto.numero
+        numero.replace(" ", "")
+        numero.replace("+34", "")
+        val deTexto: DeTexto = DeTexto("1", "2", "3", "4")
+        var miMsg = "${nota.asunto} : \n \t ${deTexto.texto}"
+        if (TextUtils.isDigitsOnly(numero)) {
+            var smsManager: SmsManager = SmsManager.getDefault()
+            smsManager.sendTextMessage(numero, null, miMsg, null, null)
         }
-    }
+    }*/
 
 }

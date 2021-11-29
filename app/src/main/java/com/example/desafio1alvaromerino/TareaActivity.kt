@@ -29,8 +29,7 @@ class TareaActivity : AppCompatActivity() {
         val i = intent.extras
         deTarea = i?.getSerializable("Tarea") as DeTareas
 
-        var tarea1:Tarea = Tarea("idTarea","id_nota","Descripcion",0)
-        tareas.add(tarea1)
+
         btnAdd = findViewById<ImageButton>(R.id.imgAddNota)
         miRecyclerView = findViewById(R.id.rvTareas)
         miRecyclerView.setHasFixedSize(true)
@@ -44,6 +43,8 @@ class TareaActivity : AppCompatActivity() {
         val intent = Intent(this, ItemTareaActivity::class.java)
         var tarea :Tarea = Tarea(FactoriaNota.factoria_id(),deTarea.id,"",0)
         intent.putExtra("Tarea", tarea)
+        tareas.add(tarea)
+        Conexion.Conexion.addTarea(this,deTarea.id, tarea)
         startActivity(intent)
     }
     fun cancelar(view:View){

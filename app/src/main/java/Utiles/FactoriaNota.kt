@@ -1,5 +1,6 @@
 package Utiles
 
+import Modelo.DeTareas
 import Modelo.DeTexto
 import Modelo.Notas
 import Modelo.Tarea
@@ -28,14 +29,24 @@ object FactoriaNota {
         return nota
     }
 
-    fun generarNotaTexto(nota:Notas, texto:String): DeTexto{
-        var notaTexto:DeTexto = DeTexto(nota.id,nota.asunto,nota.fecha,nota.hora,texto)
+    fun generarNotaTexto(idnota:String, asunto:String, contenido:String): DeTexto{
+        var id = idnota
+        var time = Timestamp(System.currentTimeMillis())
+        var fecha = SimpleDateFormat("yyyy/MM/dd").format(time).toString()
+        var hora = SimpleDateFormat("HH:mm").format(time).toString()
+        var texto=contenido
+        var notaTexto = DeTexto(id, fecha, hora, asunto, texto)
         return notaTexto
     }
 
-    fun generarTarea(id_nota:String, asunto: String){
+    fun generarTarea(asunto: String): DeTareas{
         var id = factoria_id()
-        var imagen = R.drawable.ic_baseline_image_24
-        var tarea: Tarea = Tarea(id,id_nota,asunto,imagen)
+        var time = Timestamp(System.currentTimeMillis())
+        var fecha = SimpleDateFormat("yyyy/MM/dd").format(time).toString()
+        var hora = SimpleDateFormat("HH:mm").format(time).toString()
+        var texto=""
+        var tareas:ArrayList<Tarea> = ArrayList()
+        var notaTarea: DeTareas = DeTareas(id, fecha, hora, asunto, tareas)
+        return notaTarea
     }
 }

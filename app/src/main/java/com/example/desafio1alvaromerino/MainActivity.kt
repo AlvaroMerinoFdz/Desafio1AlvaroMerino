@@ -59,7 +59,10 @@ class MainActivity : AppCompatActivity() {
         if(miAdapter.getSelected().tipo == 0){
 
             val intent = Intent(this,TextoActivity::class.java)
-            intent.putExtra("Texto",miAdapter.getSelected())
+            val nota:Notas = miAdapter.getSelected() as Notas
+            var texto:String? = null
+            intent.putExtra("Texto",texto)
+            intent.putExtra("Nota", nota.id)
             startActivity(intent)
         }else{
             val intent = Intent(this,TareaActivity::class.java)
@@ -83,39 +86,41 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     asunto = txtAsunto.text.trim().toString()
                 }
-                var nota:Notas = FactoriaNota.genererarNota(asunto,0)
+                //var nota:Notas = FactoriaNota.generarNotaTexto(asunto,0)
+                //Generamos la de texto
+                //var nota:Notas = FactoriaNota.genererarNota(asunto,0)  	--> Este era el error
+
+                //var deTexto =FactoriaNota.generarNotaTexto(asunto)
                 //Añadimos la nota a la lista
-                notas.add(nota)
-
-
+                //notas.add(deTexto)
 
                 val intent = Intent(this, TextoActivity::class.java)
-               //Generamos la de texto
-                var deTexto = DeTexto(nota.id,nota.fecha,nota.hora,asunto)
                 //Guardamos la nota en la Base de Datos
-                Conexion.Conexion.addTexto(this,deTexto)
+                //Conexion.Conexion.addTexto(this,deTexto)
+
                 //La pasamos a la siguiente ventana
-                intent.putExtra("Texto", deTexto)
+                //intent.putExtra("Texto", deTexto)
+                intent.putExtra("Texto", txtAsunto.text.toString())
                 startActivity(intent)
-            view.dismiss()}
+                view.dismiss()}
             .setNegativeButton(R.string.addTareas){view,_ ->
                 if(txtAsunto.text.toString().trim().isEmpty()){
                     asunto = "Asunto"
                 }else{
                     asunto = txtAsunto.text.trim().toString()
                 }
-                var nota:Notas = FactoriaNota.genererarNota(asunto,0)
+                //var nota:Notas = FactoriaNota.genererarNota(asunto,1)       --> Y este. Que por cierto tenías que se iniciara a 0 (notas de texto).
+                var deTareas:DeTareas =FactoriaNota.generarTarea(asunto)
                 //Añadimos la nota a la lista
-                notas.add(nota)
+                notas.add(deTareas)
 
                 val intent = Intent(this, TareaActivity::class.java)
-                //Generamos la deTareas
-                var deTareas = DeTareas(nota.id,nota.fecha,nota.hora,asunto)
                 //Guardamos la nota en la Base de Datos
-                Conexion.Conexion.addNota(this,nota)
+                Conexion.Conexion.addNota(this,deTareas)
                 //La pasamos a la siguiente ventana
                 intent.putExtra("Tarea", deTareas)
                 startActivity(intent)
-            view.dismiss()}.create().show()
+                view.dismiss()}.create().show()
     }
+
 }
