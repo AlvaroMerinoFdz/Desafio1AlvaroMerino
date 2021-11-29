@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                 notas.add(nota)
 
                 val intent = Intent(this, TareaActivity::class.java)
-                //Generamos la de texto
+                //Generamos la deTareas
                 var deTareas = DeTareas(nota.id,nota.fecha,nota.hora,asunto)
                 //Guardamos la nota en la Base de Datos
                 Conexion.Conexion.addNota(this,nota)

@@ -65,7 +65,6 @@
         style="@style/Theme.Desafio1AlvaroMerino.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="guardar"
         android:text="@string/Guardar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

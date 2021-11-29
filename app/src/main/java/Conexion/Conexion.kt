@@ -45,6 +45,19 @@ object Conexion {
         bd.close()
 
     }
+    fun addTarea(context: AppCompatActivity,idNota:String, tarea:Tarea){
+        val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
+        val bd = admin.writableDatabase
+        val reg = ContentValues()
+
+        reg.put("${Constantes.CODIGO_TAREAS}", tarea.idTarea)
+        reg.put("${Constantes.IDCRUZADO_TAREAS}", idNota)
+        reg.put("${Constantes.DESCRIPCION_TAREAS}", tarea.descripcion)
+        reg.put("${Constantes.REALIZADO_TAREAS}", tarea.realizada)
+        reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
+        bd.insert("${Constantes.TABLA_TAREAS}", null, reg)
+        bd.close()
+    }
 
 
     fun addTarea(context: Context, idNota:Int, tarea:Tarea){

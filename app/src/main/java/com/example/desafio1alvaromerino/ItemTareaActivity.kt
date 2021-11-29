@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Switch
@@ -34,13 +35,25 @@ class ItemTareaActivity : AppCompatActivity() {
 
 
         val i = intent.extras
-        //tarea = i?.getSerializable("Tarea") as Tarea
+        tarea = i?.getSerializable("Tarea") as Tarea
         imagen = findViewById(R.id.imgImagenTarea)
+
+
+        var btnGuardar : Button = findViewById(R.id.btnGuardarTarea)
+        btnGuardar.setOnClickListener {
+            var txtDescripcion = findViewById<EditText>(R.id.txtDescripcion)
+            var imagen = findViewById<ImageView>(R.id.imgImagenTarea)
+            var switch = findViewById<Switch>(R.id.swRealizada)
+
+            tarea.descripcion = txtDescripcion.text.toString()
+            tarea.foto = imagen.imageAlpha
+            tarea.realizada = switch.isChecked
+        }
 
 
     }
 
-    //https://es.stackoverflow.com/questions/33561/c%C3%B3mo-guardar-un-imageview-en-android
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         try {

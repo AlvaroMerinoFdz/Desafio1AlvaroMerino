@@ -16,4 +16,8 @@
     <string name="Cancelar">Cancel</string>
     <string name="Capturar">Capture</string>
     <string name="Realizado">Realice</string>
+    <string name="Contactos">Contacts</string>
+    <string name="OK">Ok</string>
+    <string name="noSeleccionado">Aucun contact sélectionné</string>
+    <string name="noExisten">"Il n'y a aucun contact "</string>
 </resources>
