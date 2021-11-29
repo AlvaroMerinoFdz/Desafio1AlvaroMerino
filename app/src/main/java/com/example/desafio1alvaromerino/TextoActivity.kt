@@ -27,12 +27,10 @@ class TextoActivity : AppCompatActivity() {
     lateinit var txtAsunto: EditText
     lateinit var txtContenido: EditText
     lateinit var btnGuardar: Button
-
-    //lateinit var nota: Notas
     private var idNota: String = ""
     private var texto: String = ""
     private var deTexto:DeTexto? = null
-    lateinit var adaptadorContactos: Adaptador.AdaptadorContactos
+    lateinit var adaptadorContactos: AdaptadorContactos
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_texto)
@@ -116,7 +114,7 @@ class TextoActivity : AppCompatActivity() {
     }
 
     private fun enviarMensaje(contacto: Contacto) {
-        /*val packageManager = this.packageManager
+        val packageManager = this.packageManager
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY) || packageManager.hasSystemFeature(
                 PackageManager.FEATURE_TELEPHONY_CDMA
             )
@@ -128,7 +126,7 @@ class TextoActivity : AppCompatActivity() {
             } else {
                 sendSMS(contacto)
             }
-        }*/
+        }
     }
 
     private fun getContactos(): ArrayList<Contacto> {
@@ -208,7 +206,7 @@ class TextoActivity : AppCompatActivity() {
     }
 
 
-    /*override fun onRequestPermissionsResult(
+    override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
@@ -221,18 +219,21 @@ class TextoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Necesitas tener permisos", Toast.LENGTH_SHORT).show();
             }
         }
-    }*/
+    }
 
-    /*private fun sendSMS(contacto: Contacto) {
+    private fun sendSMS(contacto: Contacto) {
         var numero: String = contacto.numero
         numero.replace(" ", "")
         numero.replace("+34", "")
-        val deTexto: DeTexto = DeTexto("1", "2", "3", "4")
-        var miMsg = "${nota.asunto} : \n \t ${deTexto.texto}"
+        var nota: DeTexto? = Conexion.Conexion.getNotaTexto(this, idNota)
+        if(nota == null){
+            nota = FactoriaNota.generarNotaTexto(idNota,txtAsunto.text.toString(),txtContenido.text.toString())
+        }
+        var miMsg = "${nota.asunto} : \n \t ${nota.texto}"
         if (TextUtils.isDigitsOnly(numero)) {
             var smsManager: SmsManager = SmsManager.getDefault()
             smsManager.sendTextMessage(numero, null, miMsg, null, null)
         }
-    }*/
+    }
 
 }

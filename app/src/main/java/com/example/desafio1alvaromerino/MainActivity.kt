@@ -66,7 +66,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }else{
             val intent = Intent(this,TareaActivity::class.java)
-            intent.putExtra("Tarea",miAdapter.getSelected())
+            val deTareas = miAdapter.getSelected()
+            intent.putExtra("deTareas", deTareas)
             startActivity(intent)
         }
 
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     asunto = txtAsunto.text.trim().toString()
                 }
-                //var nota:Notas = FactoriaNota.genererarNota(asunto,1)       --> Y este. Que por cierto tenías que se iniciara a 0 (notas de texto).
+
                 var deTareas:DeTareas =FactoriaNota.generarTarea(asunto)
                 //Añadimos la nota a la lista
                 notas.add(deTareas)

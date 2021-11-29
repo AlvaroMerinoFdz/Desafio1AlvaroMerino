@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,12 +23,17 @@ class TareaActivity : AppCompatActivity() {
     lateinit var miAdapter:Adaptador.AdaptadorRecyclerTarea
     lateinit var miRecyclerView: RecyclerView
     lateinit var deTarea: DeTareas
+    lateinit var txtAsunto:EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tarea)
+        txtAsunto = findViewById(R.id.txtAsuntoTarea)
 
         val i = intent.extras
         deTarea = i?.getSerializable("Tarea") as DeTareas
+
+        txtAsunto.setText(deTarea.asunto)
+
 
 
         btnAdd = findViewById<ImageButton>(R.id.imgAddNota)

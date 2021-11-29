@@ -112,7 +112,7 @@ object Conexion {
         reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
         reg.put("${Constantes.REALIZADO_TAREAS}", tarea.realizada)
 
-        val cant = bd.update("${Constantes.TABLA_TAREAS}",reg,"${Constantes.CODIGO_TAREAS}='${tarea.idTarea}",null)
+        val cant = bd.update("${Constantes.TABLA_TAREAS}",reg,"${Constantes.CODIGO_TAREAS}='${tarea.idTarea}'",null)
         bd.close()
         return cant
     }
