@@ -45,13 +45,13 @@ object Conexion {
         bd.close()
 
     }
-    fun addTarea(context: Context,idNota:String, tarea:Tarea){
+    fun addTarea(context: Context, tarea: Tarea){
         val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
         val bd = admin.writableDatabase
         val reg = ContentValues()
 
         reg.put("${Constantes.CODIGO_TAREAS}", tarea.idTarea)
-        reg.put("${Constantes.IDCRUZADO_TAREAS}", idNota)
+        reg.put("${Constantes.IDCRUZADO_TAREAS}", tarea.id_nota)
         reg.put("${Constantes.DESCRIPCION_TAREAS}", tarea.descripcion)
         reg.put("${Constantes.REALIZADO_TAREAS}", tarea.realizada)
         reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
@@ -107,10 +107,12 @@ object Conexion {
         val admin = AdminSQLiteConexion(context, nombreBBDD, null, 1)
         val bd = admin.writableDatabase
         val reg = ContentValues()
-
+        reg.put("${Constantes.CODIGO_TAREAS}", tarea.idTarea)
+        reg.put("${Constantes.IDCRUZADO_TAREAS}", tarea.id_nota)
         reg.put("${Constantes.DESCRIPCION_TAREAS}", tarea.descripcion)
         reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
         reg.put("${Constantes.REALIZADO_TAREAS}", tarea.realizada)
+        reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
 
         val cant = bd.update("${Constantes.TABLA_TAREAS}",reg,"${Constantes.CODIGO_TAREAS}='${tarea.idTarea}'",null)
         bd.close()
@@ -163,6 +165,18 @@ object Conexion {
             }
         }
         return deTexto
+    }
+
+    fun getTareas(context: AppCompatActivity, idCruzado: String?): ArrayList<Tarea> {
+        var tareas: ArrayList<Tarea> = ArrayList(0)
+        val admin = AdminSQLiteConexion(context, Constantes.NOMBREBBDD, null, 1)
+        val bd = admin.writableDatabase
+        var fila = bd.rawQuery("Select ${Constantes.CODIGO_TAREAS},${Constantes.IDCRUZADO_TAREAS}, ${Constantes.DESCRIPCION_TAREAS}, ${Constantes.FOTO_TAREAS}, ${Constantes.REALIZADO_TAREAS} from ${Constantes.TABLA_TAREAS} WHERE ${Constantes.IDCRUZADO_TAREAS} = '$idCruzado'", null)
+        if(fila.moveToNext()){
+            var tarea = Tarea(fila.getString(0), fila.getString(1), fila.getString(2), fila.getBlob(3), fila.getInt(4)==1)
+            tareas.add(tarea)
+        }
+        return tareas
     }
 
 

@@ -40,7 +40,19 @@ class TareaActivity : AppCompatActivity() {
         //coger el asunto de la tarea
         txtAsunto.setText(asunto)
 
+        tareas = Conexion.Conexion.getTareas(this, idTarea)
+
         btnAdd = findViewById<ImageButton>(R.id.imgAddNota)
+        miRecyclerView = findViewById(R.id.rvTareas)
+        miRecyclerView.setHasFixedSize(true)
+        miRecyclerView.layoutManager = LinearLayoutManager(this)
+        miAdapter = AdaptadorRecyclerTarea(tareas,this)
+        miRecyclerView.adapter = miAdapter
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         miRecyclerView = findViewById(R.id.rvTareas)
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -51,10 +63,8 @@ class TareaActivity : AppCompatActivity() {
 
     fun add(view:View){
         val intent = Intent(this, ItemTareaActivity::class.java)
-        var tarea :Tarea = Tarea(FactoriaNota.factoria_id(),idTarea!!,"",0)
-        intent.putExtra("Tarea", tarea)
-        tareas.add(tarea)
-        Conexion.Conexion.addTarea(this,idTarea!!, tarea)
+        intent.putExtra("idTarea", FactoriaNota.factoria_id())
+        intent.putExtra("idNota", idTarea)
         startActivity(intent)
     }
 

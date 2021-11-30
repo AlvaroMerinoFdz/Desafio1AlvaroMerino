@@ -79,9 +79,6 @@ RecyclerView.Adapter<ViewHolder>()  {
                     .setNegativeButton(context.getString(R.string.borrarNo)) { view, _ -> view.dismiss() }.setCancelable(false).create().show()
                 true
             })
-
-
             }
         }
-
     }

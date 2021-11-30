@@ -3,10 +3,11 @@ package com.example.desafio1alvaromerino
 
 import Modelo.Tarea
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
@@ -18,40 +19,51 @@ import android.widget.ImageView
 import android.widget.Switch
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
 
 class ItemTareaActivity : AppCompatActivity() {
-    lateinit var tarea : Tarea
     private val cameraRequest = 1888
     lateinit var imagen:ImageView
     lateinit var nombreImagen:String
+    private var idNota : String? = null
+    private var idTarea : String? = null
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    lateinit var switch: Switch
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_tarea)
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), cameraRequest)
 
+        var txtDescripcion = findViewById<EditText>(R.id.txtDescripcion)
+        imagen = findViewById<ImageView>(R.id.imgImagenTarea)
+        switch = findViewById(R.id.swRealizado)
 
         val i = intent.extras
-        tarea = i?.getSerializable("Tarea") as Tarea
-        imagen = findViewById(R.id.imgImagenTarea)
+
+        idNota = i?.getString("idNota")
+        idTarea = i?.getString("Tarea")
+
 
 
         var btnGuardar : Button = findViewById(R.id.btnGuardarTarea)
         btnGuardar.setOnClickListener {
-            var txtDescripcion = findViewById<EditText>(R.id.txtDescripcion)
-            var imagen = findViewById<ImageView>(R.id.imgImagenTarea)
-            var switch = findViewById<Switch>(R.id.swRealizada)
-
-            tarea.descripcion = txtDescripcion.text.toString()
-            tarea.foto = imagen.imageAlpha
-            tarea.realizada = false
-
-            Conexion.Conexion.modificarTarea(this,tarea)
+            //Creamos la tarea
+            var tarea = Tarea(idTarea!!,idNota!!,txtDescripcion.text.toString(),guardarImagen(),switch.isChecked)
+            Conexion.Conexion.addTarea(this,tarea)
+            finish()
         }
+    }
+    fun guardarImagen(): ByteArray{
+        var bitmap = imagen.drawingCache
+        var baos = ByteArrayOutputStream(20480)
+        bitmap.compress(Bitmap.CompressFormat.PNG,0,baos)
+        var blob = baos.toByteArray()
 
+        return blob
 
     }
 
@@ -62,9 +74,7 @@ class ItemTareaActivity : AppCompatActivity() {
             if (requestCode == cameraRequest) {
                 val photo: Bitmap = data?.extras?.get("data") as Bitmap
                 imagen.setImageBitmap(photo)
-
                 var fotoFichero = File(getExternalFilesDir(null), nombreImagen)
-                var uri = Uri.fromFile(fotoFichero)
                 var fileOutStream = FileOutputStream(fotoFichero)
                 photo.compress(Bitmap.CompressFormat.PNG, 100, fileOutStream);
                 fileOutStream.flush();
@@ -76,19 +86,20 @@ class ItemTareaActivity : AppCompatActivity() {
     }
 
 
-    fun guardar(view:View){
-        var txtDescripcion = findViewById<EditText>(R.id.txtDescripcion)
-        var imagen = findViewById<ImageView>(R.id.imgImagenTarea)
-        var switch = findViewById<Switch>(R.id.swRealizada)
-
-        tarea.descripcion = txtDescripcion.text.toString()
-        tarea.foto = imagen.imageAlpha
-        tarea.realizada = switch.isChecked
-
-    }
     fun tomarFoto(view:View){
         val cameraIntent = Intent(ACTION_IMAGE_CAPTURE)
         startActivityForResult(cameraIntent,cameraRequest)
+    }
+
+    fun getBytes(bitmap: Bitmap): ByteArray? {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream)
+        return stream.toByteArray()
+    }
+
+    // convert from byte array to bitmap
+    fun getImage(image: ByteArray): Bitmap? {
+        return BitmapFactory.decodeByteArray(image, 0, image.size)
     }
 
 }
