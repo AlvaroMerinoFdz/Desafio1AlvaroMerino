@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
         }else{
             val intent = Intent(this,TareaActivity::class.java)
             val deTareas = miAdapter.getSelected()
-            intent.putExtra("deTareas", deTareas)
+            intent.putExtra("idTarea", deTareas.id)
+            intent.putExtra("Asunto", deTareas.asunto)
             startActivity(intent)
         }
 
@@ -87,20 +88,7 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     asunto = txtAsunto.text.trim().toString()
                 }
-                //var nota:Notas = FactoriaNota.generarNotaTexto(asunto,0)
-                //Generamos la de texto
-                //var nota:Notas = FactoriaNota.genererarNota(asunto,0)  	--> Este era el error
-
-                //var deTexto =FactoriaNota.generarNotaTexto(asunto)
-                //Añadimos la nota a la lista
-                //notas.add(deTexto)
-
                 val intent = Intent(this, TextoActivity::class.java)
-                //Guardamos la nota en la Base de Datos
-                //Conexion.Conexion.addTexto(this,deTexto)
-
-                //La pasamos a la siguiente ventana
-                //intent.putExtra("Texto", deTexto)
                 intent.putExtra("Texto", txtAsunto.text.toString())
                 startActivity(intent)
                 view.dismiss()}
@@ -112,14 +100,11 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 var deTareas:DeTareas =FactoriaNota.generarTarea(asunto)
-                //Añadimos la nota a la lista
-                notas.add(deTareas)
-
                 val intent = Intent(this, TareaActivity::class.java)
-                //Guardamos la nota en la Base de Datos
-                Conexion.Conexion.addNota(this,deTareas)
-                //La pasamos a la siguiente ventana
-                intent.putExtra("Tarea", deTareas)
+                intent.putExtra("idTarea", deTareas.id)
+                intent.putExtra("Asunto", deTareas.asunto)
+
+
                 startActivity(intent)
                 view.dismiss()}.create().show()
     }

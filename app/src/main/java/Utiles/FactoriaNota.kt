@@ -19,8 +19,8 @@ object FactoriaNota {
         return id
     }
 
-    fun genererarNota(asunto:String, tipo:Int):Notas{
-        var id = factoria_id()
+    fun genererarNota(id:String, asunto: String, tipo:Int):Notas{
+        var id = id
         var time = Timestamp(System.currentTimeMillis())
         var fecha = SimpleDateFormat("yyyy/MM/dd").format(time).toString()
         var hora = SimpleDateFormat("HH:mm").format(time).toString()
@@ -49,4 +49,5 @@ object FactoriaNota {
         var notaTarea: DeTareas = DeTareas(id, fecha, hora, asunto, tareas)
         return notaTarea
     }
+
 }

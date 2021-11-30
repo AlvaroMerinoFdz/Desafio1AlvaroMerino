@@ -3,6 +3,7 @@ package com.example.desafio1alvaromerino
 import Adaptador.AdaptadorRecyclerTarea
 import Modelo.DeTareas
 import Modelo.DeTexto
+import Modelo.Notas
 import Modelo.Tarea
 import Utiles.Auxiliar
 import Utiles.FactoriaNota
@@ -22,7 +23,8 @@ class TareaActivity : AppCompatActivity() {
     var tareas : ArrayList<Tarea> = ArrayList<Tarea>()
     lateinit var miAdapter:Adaptador.AdaptadorRecyclerTarea
     lateinit var miRecyclerView: RecyclerView
-    lateinit var deTarea: DeTareas
+    private var idTarea: String? = null
+    private var asunto:String? = null
     lateinit var txtAsunto:EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +32,13 @@ class TareaActivity : AppCompatActivity() {
         txtAsunto = findViewById(R.id.txtAsuntoTarea)
 
         val i = intent.extras
-        deTarea = i?.getSerializable("Tarea") as DeTareas
+        idTarea = i?.getString("idTarea")
+        asunto = i?.getString("Asunto")
 
-        txtAsunto.setText(deTarea.asunto)
+        //coger las tareas de la base de datos
 
-
+        //coger el asunto de la tarea
+        txtAsunto.setText(asunto)
 
         btnAdd = findViewById<ImageButton>(R.id.imgAddNota)
         miRecyclerView = findViewById(R.id.rvTareas)
@@ -47,16 +51,16 @@ class TareaActivity : AppCompatActivity() {
 
     fun add(view:View){
         val intent = Intent(this, ItemTareaActivity::class.java)
-        var tarea :Tarea = Tarea(FactoriaNota.factoria_id(),deTarea.id,"",0)
+        var tarea :Tarea = Tarea(FactoriaNota.factoria_id(),idTarea!!,"",0)
         intent.putExtra("Tarea", tarea)
         tareas.add(tarea)
-        Conexion.Conexion.addTarea(this,deTarea.id, tarea)
+        Conexion.Conexion.addTarea(this,idTarea!!, tarea)
         startActivity(intent)
     }
-    fun cancelar(view:View){
-        finish()
-    }
-    fun guardar(view:View){
 
+    fun guardar(view:View){
+        var nota:Notas = FactoriaNota.genererarNota(idTarea!!,asunto!!,1)
+        Conexion.Conexion.addNota(this, nota)
+        finish()
     }
 }
