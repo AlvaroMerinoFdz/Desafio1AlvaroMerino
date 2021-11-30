@@ -2,6 +2,7 @@ package com.example.desafio1alvaromerino
 
 
 import Modelo.Tarea
+import Utiles.Auxiliar
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,10 +14,7 @@ import android.os.Bundle
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Switch
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.ByteArrayOutputStream
@@ -30,6 +28,8 @@ class ItemTareaActivity : AppCompatActivity() {
     lateinit var nombreImagen:String
     private var idNota : String? = null
     private var idTarea : String? = null
+    lateinit var tarea :Tarea
+    lateinit var txtDescripcion: EditText
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     lateinit var switch: Switch
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,41 +38,36 @@ class ItemTareaActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), cameraRequest)
 
-        var txtDescripcion = findViewById<EditText>(R.id.txtDescripcion)
+        txtDescripcion = findViewById<EditText>(R.id.txtDescripcion)
         imagen = findViewById<ImageView>(R.id.imgImagenTarea)
         switch = findViewById(R.id.swRealizado)
 
         val i = intent.extras
 
         idNota = i?.getString("idNota")
-        idTarea = i?.getString("Tarea")
+        idTarea = i?.getString("idTarea")
 
+        //Creamos la tarea
+         tarea = Tarea(idTarea!!,idNota!!,"")
 
 
         var btnGuardar : Button = findViewById(R.id.btnGuardarTarea)
         btnGuardar.setOnClickListener {
-            //Creamos la tarea
-            var tarea = Tarea(idTarea!!,idNota!!,txtDescripcion.text.toString(),guardarImagen(),switch.isChecked)
+
+            tarea.descripcion = txtDescripcion.text.toString()
+            tarea.realizada = switch.isChecked
+
             Conexion.Conexion.addTarea(this,tarea)
             finish()
         }
     }
-    fun guardarImagen(): ByteArray{
-        var bitmap = imagen.drawingCache
-        var baos = ByteArrayOutputStream(20480)
-        bitmap.compress(Bitmap.CompressFormat.PNG,0,baos)
-        var blob = baos.toByteArray()
-
-        return blob
-
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         try {
             if (requestCode == cameraRequest) {
                 val photo: Bitmap = data?.extras?.get("data") as Bitmap
+                tarea.foto = photo
                 imagen.setImageBitmap(photo)
                 var fotoFichero = File(getExternalFilesDir(null), nombreImagen)
                 var fileOutStream = FileOutputStream(fotoFichero)
@@ -91,15 +86,6 @@ class ItemTareaActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent,cameraRequest)
     }
 
-    fun getBytes(bitmap: Bitmap): ByteArray? {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream)
-        return stream.toByteArray()
-    }
 
-    // convert from byte array to bitmap
-    fun getImage(image: ByteArray): Bitmap? {
-        return BitmapFactory.decodeByteArray(image, 0, image.size)
-    }
 
 }

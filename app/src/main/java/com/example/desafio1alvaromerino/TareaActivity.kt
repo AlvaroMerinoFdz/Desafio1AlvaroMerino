@@ -36,7 +36,7 @@ class TareaActivity : AppCompatActivity() {
         asunto = i?.getString("Asunto")
 
         //coger las tareas de la base de datos
-
+        Conexion.Conexion.getTareas(this, idTarea)
         //coger el asunto de la tarea
         txtAsunto.setText(asunto)
 
@@ -53,6 +53,7 @@ class TareaActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        tareas = Conexion.Conexion.getTareas(this, idTarea)
         miRecyclerView = findViewById(R.id.rvTareas)
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(this)

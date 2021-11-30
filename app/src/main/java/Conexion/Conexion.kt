@@ -3,10 +3,20 @@ package Conexion
 import Modelo.DeTexto
 import Modelo.Notas
 import Modelo.Tarea
+import Utiles.Auxiliar
 import Utiles.Constantes
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
+import java.io.ByteArrayInputStream
+import java.sql.Blob
+import android.graphics.BitmapFactory
+
+import android.graphics.Bitmap
+
+
+
 
 object Conexion {
     private var nombreBBDD = Constantes.NOMBREBBDD
@@ -54,7 +64,9 @@ object Conexion {
         reg.put("${Constantes.IDCRUZADO_TAREAS}", tarea.id_nota)
         reg.put("${Constantes.DESCRIPCION_TAREAS}", tarea.descripcion)
         reg.put("${Constantes.REALIZADO_TAREAS}", tarea.realizada)
-        reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
+        if(tarea.foto != null){
+            reg.put("${Constantes.FOTO_TAREAS}", Auxiliar.getBytes(tarea.foto!!))
+        }
         bd.insert("${Constantes.TABLA_TAREAS}", null, reg)
         bd.close()
     }
@@ -110,9 +122,8 @@ object Conexion {
         reg.put("${Constantes.CODIGO_TAREAS}", tarea.idTarea)
         reg.put("${Constantes.IDCRUZADO_TAREAS}", tarea.id_nota)
         reg.put("${Constantes.DESCRIPCION_TAREAS}", tarea.descripcion)
-        reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
+        reg.put("${Constantes.FOTO_TAREAS}", Auxiliar.getBytes(tarea.foto!!))
         reg.put("${Constantes.REALIZADO_TAREAS}", tarea.realizada)
-        reg.put("${Constantes.FOTO_TAREAS}", tarea.foto)
 
         val cant = bd.update("${Constantes.TABLA_TAREAS}",reg,"${Constantes.CODIGO_TAREAS}='${tarea.idTarea}'",null)
         bd.close()
@@ -171,12 +182,23 @@ object Conexion {
         var tareas: ArrayList<Tarea> = ArrayList(0)
         val admin = AdminSQLiteConexion(context, Constantes.NOMBREBBDD, null, 1)
         val bd = admin.writableDatabase
-        var fila = bd.rawQuery("Select ${Constantes.CODIGO_TAREAS},${Constantes.IDCRUZADO_TAREAS}, ${Constantes.DESCRIPCION_TAREAS}, ${Constantes.FOTO_TAREAS}, ${Constantes.REALIZADO_TAREAS} from ${Constantes.TABLA_TAREAS} WHERE ${Constantes.IDCRUZADO_TAREAS} = '$idCruzado'", null)
-        if(fila.moveToNext()){
-            var tarea = Tarea(fila.getString(0), fila.getString(1), fila.getString(2), fila.getBlob(3), fila.getInt(4)==1)
+        var reg = bd.rawQuery("Select ${Constantes.CODIGO_TAREAS},${Constantes.IDCRUZADO_TAREAS}, ${Constantes.DESCRIPCION_TAREAS}, ${Constantes.FOTO_TAREAS}, ${Constantes.REALIZADO_TAREAS} from ${Constantes.TABLA_TAREAS} WHERE ${Constantes.IDCRUZADO_TAREAS} = '$idCruzado'", null)
+        while (reg.moveToNext()) {
+            val imgBytes = reg.getBlob(3)
+            val tarea = Tarea(reg.getString(0), reg.getString(1), reg.getString(2),realizada = reg.getInt(4) == 1)
+            if (imgBytes != null) tarea.foto = Auxiliar.getImage(imgBytes)
             tareas.add(tarea)
         }
+        bd.close()
         return tareas
+    }
+
+    fun recuperarImagen(fila:Cursor): Bitmap? {
+        var imageByteArray: ByteArray? = fila.getBlob(3)
+        fila.close()
+        val imageStream = ByteArrayInputStream(imageByteArray)
+        val theImage = BitmapFactory.decodeStream(imageStream)
+        return theImage
     }
 
 
